@@ -7,7 +7,7 @@ Stable tag: 1.3.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The RT Mega Menu for Elementor page builder is a powerful tool designed to enhance the navigation experience on your website.
+RT Mega Menu is a dedicated mega menu plugin for Elementor that helps you build advanced, responsive mega menus and improve your site’s navigation using Elementor’s visual editor.
 
 == Description ==
 RT Mega Menu is a powerful and easy-to-use WordPress mega menu builder plugin that transforms your navigation into an engaging, highly customizable menu experience. Designed with flexibility and performance in mind, RT Mega Menu lets you create stunning mega menus using your favorite page builders—without writing a single line of code.
