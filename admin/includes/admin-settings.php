@@ -141,25 +141,11 @@ if ( ! class_exists('RTMEGA_MENU_admin_settings')) {
                     'type'  => 'text',
                     'label' => 'Menu Width',
                 ),
-                array(
-                    'id'    => 'megamenu_sections_start',
-                    'name'  => 'megamenu_sections_start',
-                    'type'  => 'section_start',
-                    'label' => 'Mega Menu:',
-                ),
-                array(
-                    'id'    => 'megamenu_width',
-                    'name'  => 'megamenu_width',
-                    'type'  => 'text',
-                    'label' => 'Menu Width',
-                ),
+                
             );
     
-    
             $rtmega_settings_fields['style_fields'] = $style_fields;
-    
             return $rtmega_settings_fields;
-    
     
         }
     

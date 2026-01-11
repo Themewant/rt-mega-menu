@@ -238,14 +238,7 @@ if ( !class_exists('RTMEGA_MENU_Admin_Ajax')) {
                                                     <strong>Width (ex: 100px or 100%)</strong>
                                                     <input type="text" name="width" value="<?php echo esc_attr($RTMEGA_menuwidth); ?>">
                                                 </label>
-                                                <label>
-                                                    <strong>Full Width</strong>
-                                                    <input 
-                                                    type="checkbox" 
-                                                    class="menu-item-checkbox emicons_full_width_switch" 
-                                                    name="full_width" 
-                                                    value="<?php echo esc_attr( $RTMEGA_menu_full_width == 'on' ? 'on' : '' ) ?>" <?php echo esc_attr( $RTMEGA_menu_full_width == 'on' ? 'checked' : '' ) ?>>
-                                                </label>
+                                               
                                             </div>
                                         </li>
                                         <?php do_action( 'after_style_options_rt_mega_menu' ); ?>

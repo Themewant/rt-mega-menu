@@ -67,8 +67,6 @@ class RTMEGA_Nav_Walker extends Walker_Nav_Menu {
         $styles .= !empty($css['top']) ? 'top:' . $css['top'] . ';' : '';
         $styles .= !empty($css['width']) ? 'width:' . $css['width'] . ';' : '';
     
-        // Full width class
-        $RTMEGA_menu_full_width = (!empty($css['full_width']) && $css['full_width'] === 'on') ? 'full-width-mega-menu' : '';
     }
     
     
