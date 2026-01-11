@@ -10,9 +10,7 @@
         <?php 
 
         $license_status = '';
-
         $license_status = apply_filters( 'check_rt_mega_license_status', $license_status );
-    
         $templates = RTMEGA_MENU_Template_Library::instance()->get_rtmega_templates();    
         
         
