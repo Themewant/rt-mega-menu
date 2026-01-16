@@ -2,8 +2,8 @@
 Contributors: themewant
 Tags: Mega menu, Elementor, Widget, Megamenu, Elementor Megamenu
 Requires at least: 6.3
-Tested up to: 6.8
-Stable tag: 1.3.9
+Tested up to: 6.9
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,6 +15,12 @@ RT Mega Menu is a powerful and easy-to-use WordPress mega menu builder plugin th
 Whether you're building a complex eCommerce navigation, a magazine layout, or a clean corporate menu, RT Mega Menu gives you the tools to do it fast and beautifully.
 
 [Demo](https://rtmega.themewant.com/) | [Documentation](https://documentation.themewant.com/docs/rt-mega-menu-wordpress-plugins/) | [Upgrade to Pro](https://themewant.com/downloads/rt-mega-menu-pro/)
+
+== Video Tutorial ==
+
+Learn how to create advanced mega menus with Elementor using RT Mega Menu.
+
+https://www.youtube.com/watch?v=Y0r7a8Jrnxg
 
 
 == 🔥 Create Menus That Convert == 
@@ -128,6 +134,20 @@ Yes, there is a free version of the RT Mega Menu plugin available on the WordPre
 1. Go to the Plugins Menu in WordPress
 2. Search for "RT Mega Menu"
 3. Click "Install Now" and then "Activate"
+
+If you like RT Mega Menu, you may also want to check our other WordPress plugins:
+
+Easy Elements for Elementor  
+https://wordpress.org/plugins/easy-elements/
+
+Easy Currency for WooCommerce  
+https://wordpress.org/plugins/easy-currency/
+
+Easy Hotel Booking
+https://wordpress.org/plugins/easy-hotel/
+
+Easy Menu icons
+https://wordpress.org/plugins/easy-menu-icons/
 
 == Screenshots ==
 
