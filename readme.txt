@@ -1,4 +1,4 @@
-=== RT Mega Menu ===
+=== RT Mega Menu - Mega Menu for Elementor  ===
 Contributors: themewant
 Tags: Mega menu, Elementor, Widget, Megamenu, Elementor Megamenu
 Requires at least: 6.3
@@ -86,6 +86,24 @@ RT Mega Menu ensures a flawless experience across devices. Whether it’s mobile
 * Theme developers
 * Corporate website managers
 
+== Other Plugins ==
+
+If you like RT Mega Menu, you may also want to check our other WordPress plugins:
+
+[Easy Elements for Elementor](https://wordpress.org/plugins/easy-elements/)
+
+Easy Currency for WooCommerce(https://wordpress.org/plugins/easy-currency/)
+
+Easy Hotel Booking(https://wordpress.org/plugins/easy-hotel/)
+
+Easy Menu icons(https://wordpress.org/plugins/easy-menu-icons/)
+
+
+== Screenshots ==
+
+See https://rtmega.themewant.com for more screenshots
+
+
 == 💬 Support & Community ==
 
 Need help? We’ve got your back. Our expert support team is available to assist with any issue.
@@ -135,23 +153,6 @@ Yes, there is a free version of the RT Mega Menu plugin available on the WordPre
 2. Search for "RT Mega Menu"
 3. Click "Install Now" and then "Activate"
 
-If you like RT Mega Menu, you may also want to check our other WordPress plugins:
-
-Easy Elements for Elementor  
-https://wordpress.org/plugins/easy-elements/
-
-Easy Currency for WooCommerce  
-https://wordpress.org/plugins/easy-currency/
-
-Easy Hotel Booking
-https://wordpress.org/plugins/easy-hotel/
-
-Easy Menu icons
-https://wordpress.org/plugins/easy-menu-icons/
-
-== Screenshots ==
-
-See https://rtmega.themewant.com for more screenshots
 
 1. Menu Settings
 2. Mega Menu Activation
