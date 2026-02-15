@@ -1,6 +1,6 @@
 === RT Mega Menu - Mega Menu for Elementor  ===
 Contributors: themewant
-Tags: Mega menu, Elementor, Widget, Megamenu, Elementor Megamenu
+Tags: Mega menu, Elementor, Widget, Megamenu, Menu
 Requires at least: 6.3
 Tested up to: 6.9
 Stable tag: 1.4.1

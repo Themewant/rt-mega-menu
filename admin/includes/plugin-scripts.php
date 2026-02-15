@@ -75,6 +75,7 @@ function rtmega_menu_admin_enqueue_scripts (){
                 [
                     'ajaxurl'          => admin_url( 'admin-ajax.php' ),
                     'adminURL'         => admin_url(),
+                    'postEditUrl'      => admin_url( 'post.php?action=edit&post=' ),    
                     'elementorURL'     => admin_url( 'edit.php?post_type=elementor_library' ),
                     'nonce'            => wp_create_nonce('rtmega_templates_import_nonce'),
                     'version'          => RTMEGA_MENU_VERSION,
