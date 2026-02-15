@@ -186,7 +186,8 @@ div#rtmega-menu-setting-modal select#rtmega-template-source-select {
     width: 200px;
 }
 
-div#rtmega-menu-setting-modal a#edit-remega-selected-template {
+div#rtmega-menu-setting-modal a#edit-remega-selected-template,
+div#rtmega-menu-setting-modal a#add-remega-template {
     display: flex;
     align-items: center;
     height: 40px;

@@ -199,6 +199,7 @@ if ( !class_exists('RTMEGA_MENU_Admin_Ajax')) {
                                             $edit_link = $template_source == 'elementor' ? admin_url('post.php?post='. $content_tempalte .'&action=elementor') : admin_url('post.php?post='. $content_tempalte .'&action=edit');
                                             ?>
                                             <a href="<?php echo esc_url($edit_link); ?>" id="edit-remega-selected-template" class="button" target="_blank" style="<?php echo esc_attr($elementor_library_query->have_posts() ? '' : 'display: none;'); ?>"><?php echo esc_html__('Edit Template', 'rt-mega-menu'); ?></a>
+                                            <a href="<?php echo esc_url(admin_url('post.php?post='. $content_tempalte .'&action=edit')) ?>" id="add-remega-template" class="button" target="_blank" style="<?php echo esc_attr($elementor_library_query->have_posts() ? '' : 'display: none;'); ?>">Add New</a>
                                            
                                         </li>
                                         <li class="pro-features-placeholders">
@@ -275,11 +276,13 @@ if ( !class_exists('RTMEGA_MENU_Admin_Ajax')) {
                 $rtmega_menu_item_settings = get_post_meta($menu_item_id, 'rtmega_menu_settings', true);
                 $current_template_id = isset($rtmega_menu_item_settings['content']['rtmega_template']) ? $rtmega_menu_item_settings['content']['rtmega_template'] : '';
                 $add_new_link = $template_source == 'elementor' ? admin_url('post.php?post=-1&action=elementor') : admin_url('post-new.php?post_type='. $post_type);
-                
+                $activeKitId = get_option( 'elementor_active_kit' );
+                $activeKitId = intval($activeKitId);
                 $args = array(
                     'post_type' => $post_type,
                     'posts_per_page' => -1,
                     'post_status' => 'publish',
+                    'post__not_in' => array($activeKitId)
                 );
                 $elementor_library_query = new WP_Query($args);
                 if($elementor_library_query->have_posts()){
