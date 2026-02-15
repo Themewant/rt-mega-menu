@@ -31,7 +31,7 @@ if( !class_exists('RTMEGA_MENU_Post_Types')){
                 'public' => true,
                 'publicly_queryable' => true,
                 'show_ui' => true,
-                'show_in_menu' => true,
+                'show_in_menu' => false,
                 'query_var' => true,
                 'rewrite' => array('slug' => 'rtmega-menu'),
                 'capability_type' => 'post',
