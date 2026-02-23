@@ -22,7 +22,7 @@ Learn how to create advanced mega menus with Elementor using RT Mega Menu.
 
 https://www.youtube.com/watch?v=Y0r7a8Jrnxg
 
-Learn how to create advanced mega menus using utenberg block editor with RT Mega Menu.
+Learn how to create advanced mega menus using gutenberg block editor with RT Mega Menu.
 
 https://www.youtube.com/watch?v=j6wLVWv1DoU
 
