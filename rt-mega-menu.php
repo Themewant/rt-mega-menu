@@ -34,7 +34,6 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
     include 'public/includes/rtmega-dynamic-css.php';
     include 'public/includes/class.helper.php';
     include 'admin/includes/template-library.php';
-    include 'admin/includes/notice.php';
     include 'class.rtmega-menu.php';
     include 'public/blocks/blocks.php';
     

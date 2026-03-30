@@ -169,6 +169,7 @@ Yes, there is a free version of the RT Mega Menu plugin available on the WordPre
 
 = 1.4.2 =
 * Fixed: Vertical Mobile Issues for double click
+* Removed: Admin notices
 
 = 1.4.1 =
 * Added: Block Editor Support for Mega Menu
