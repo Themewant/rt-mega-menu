@@ -57,10 +57,11 @@ if ( !class_exists('RTMEGA_MENU_Admin_Ajax')) {
         
                 $menu_item_id = sanitize_text_field(wp_unslash($_POST['menu_item_id'])); // Ensure it's a valid integer
         
-                $settings = !empty($_POST['settings']) ? array_map('sanitize_text_field', (array) wp_unslash($_POST['settings'])) : [];
-                $css = !empty($_POST['css']) ? array_map('sanitize_text_field', (array)  wp_unslash($_POST['css'])) : [];
-        
-                update_post_meta($menu_item_id, 'rtmega_menu_settings', ['switch' => 'on', 'content' => $settings, 'css' => $css]);
+                $settings   = !empty($_POST['settings'])   ? array_map('sanitize_text_field', (array) wp_unslash($_POST['settings']))   : [];
+                $css        = !empty($_POST['css'])        ? array_map('sanitize_text_field', (array) wp_unslash($_POST['css']))        : [];
+                $conditions = !empty($_POST['conditions']) ? array_map('sanitize_text_field', (array) wp_unslash($_POST['conditions'])) : [];
+
+                update_post_meta($menu_item_id, 'rtmega_menu_settings', ['switch' => 'on', 'content' => $settings, 'css' => $css, 'conditions' => $conditions]);
             }
         
             wp_send_json_success(['message' => esc_html__('Successfully saved data.', 'rt-mega-menu'), 'settings', $settings, 'actual_action' => $actual_action, 'menu-slug' => $menu_slug, 'menu_id' => $menu_id]);
@@ -141,6 +142,7 @@ if ( !class_exists('RTMEGA_MENU_Admin_Ajax')) {
                                     'posts_per_page' => -1,
                                     'orderby' => 'id',
                                     'order' => 'DESC',
+                                    // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in -- Excluding the Elementor active kit (single ID) from template lists; negligible perf cost.
                                     'post__not_in' => array($activeKitId)
                                 );
 
@@ -216,12 +218,16 @@ if ( !class_exists('RTMEGA_MENU_Admin_Ajax')) {
                                                 <p class="rtmega-pro-notice rtmega-text-danger"><?php echo esc_html__('Please activate plugin license to use this advanced features', 'rt-mega-menu'); ?></p>
                                             </div>
                                         </li>
-                                        <?php do_action( 'after_content_options_rt_mega_menu' ); ?>
+                                        <?php
+                                        // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- rt_mega_menu suffix; intentional extensibility hook consumed by rt-mega-menu-pro.
+                                        do_action( 'after_content_options_rt_mega_menu' );
+                                        ?>
                                     </ul>
                                 </div>
                             </form>
                             
                         </div>
+                        <!-- settings and conditions -->
                         <div id="tab2" class="tab-content" style="display: none;">
                             <form action="" onsubmit="return false" id='rtmega_menu_items_css'>          
                                 <div class="rtmega-menu-option-inputs">
@@ -252,11 +258,18 @@ if ( !class_exists('RTMEGA_MENU_Admin_Ajax')) {
                                                 </label>
                                             </div>
                                         </li>
-                                        <?php do_action( 'after_style_options_rt_mega_menu' ); ?>
+                                        <?php
+                                        // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- rt_mega_menu suffix; intentional extensibility hook consumed by rt-mega-menu-pro.
+                                        do_action( 'after_style_options_rt_mega_menu' );
+                                        ?>
                                     </ul>
                                 </div>
                             </form>
                         </div>
+                        <?php
+                        // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- rt_mega_menu suffix; intentional extensibility hook consumed by rt-mega-menu-pro.
+                        do_action( 'after_style_tab_rt_mega_menu' );
+                        ?>
                     </div> <!-- END tabs-content -->
                 <?php
 
@@ -272,8 +285,8 @@ if ( !class_exists('RTMEGA_MENU_Admin_Ajax')) {
                 $template_source = sanitize_text_field(wp_unslash($_POST['template_source']));
                 $post_type = $template_source == 'elementor' ? 'elementor_library' : 'rtmega_menu';
                 $template_data = array();
-                $menu_item_id = sanitize_text_field(wp_unslash($_POST['menu_item_id']));
-                $rtmega_menu_item_settings = get_post_meta($menu_item_id, 'rtmega_menu_settings', true);
+                $menu_item_id = isset($_POST['menu_item_id']) ? sanitize_text_field(wp_unslash($_POST['menu_item_id'])) : '';
+                $rtmega_menu_item_settings = $menu_item_id ? get_post_meta($menu_item_id, 'rtmega_menu_settings', true) : [];
                 $current_template_id = isset($rtmega_menu_item_settings['content']['rtmega_template']) ? $rtmega_menu_item_settings['content']['rtmega_template'] : '';
                 $add_new_link = $template_source == 'elementor' ? admin_url('post.php?post=-1&action=elementor') : admin_url('post-new.php?post_type='. $post_type);
                 $activeKitId = get_option( 'elementor_active_kit' );
@@ -282,6 +295,7 @@ if ( !class_exists('RTMEGA_MENU_Admin_Ajax')) {
                     'post_type' => $post_type,
                     'posts_per_page' => -1,
                     'post_status' => 'publish',
+                    // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in -- Excluding the Elementor active kit (single ID) from template lists; negligible perf cost.
                     'post__not_in' => array($activeKitId)
                 );
                 $elementor_library_query = new WP_Query($args);
@@ -309,6 +323,7 @@ if ( !class_exists('RTMEGA_MENU_Admin_Ajax')) {
         }
 
         public function rtmega_create_new_template() {
+            check_ajax_referer( 'rtmega_templates_import_nonce', 'nonce' );
             if ( ! current_user_can( 'edit_posts' ) ) {
                 wp_send_json_error( array( 'message' => esc_html__( 'You do not have permission to create a template.', 'rt-mega-menu' ) ) );
             }
@@ -322,7 +337,7 @@ if ( !class_exists('RTMEGA_MENU_Admin_Ajax')) {
             if(isset($_POST['menu_item_id'])){
                 $menu_item_id = sanitize_text_field(wp_unslash($_POST['menu_item_id']));
                 $template_id = wp_insert_post(array(
-                    'post_title'    => 'Mega Menu Template - '  . rand(1000, 9999),                
+                    'post_title'    => 'Mega Menu Template - '  . wp_rand(1000, 9999),
                     'post_status'   => 'publish',
                     'post_type' => $post_type,
                 ));

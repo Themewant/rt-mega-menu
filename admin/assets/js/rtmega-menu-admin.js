@@ -234,11 +234,27 @@
                 }
             });
 
+            var conditions = {};
+            $('#rtmega_menu_items_conditions').find('input, select').each(function () {
+                if ($(this).attr('type') === 'submit') return;
+                var name = $(this).attr('name');
+                if (!name) return;
+                if ($(this).attr('type') === 'checkbox') {
+                    conditions[name] = $(this).is(':checked') ? 'on' : 'off';
+                } else if ($(this).is('select[multiple]')) {
+                    var vals = $(this).val();
+                    conditions[name] = vals && vals.length ? vals.join(',') : '';
+                } else {
+                    conditions[name] = $(this).val();
+                }
+            });
+
             let data = {
                 action: "rtmega_update_menu_options",
                 actualAction: 'saveMenuItemSettings',
                 settings: settings,
                 css: css,
+                conditions: conditions,
                 menu_id: menu_id,
                 menu_item_id: menu_item_id,
                 nonce: rtmegamenu_ajax.nonce,

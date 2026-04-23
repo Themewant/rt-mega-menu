@@ -1,13 +1,13 @@
-=== RT Mega Menu - Mega Menu for Elementor  ===
+=== RT Mega Menu ===
 Contributors: themewant
 Tags: Mega menu, Elementor, Widget, Megamenu, Menu
 Requires at least: 6.3
 Tested up to: 6.9
-Stable tag: 1.4.3
+Stable tag: 1.4.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-RT Mega Menu is a dedicated mega menu plugin for Elementor that helps you build advanced, responsive mega menus and improve your site’s navigation using Elementor’s visual editor.
+Build advanced, responsive mega menus for Elementor and Gutenberg with a visual drag-and-drop editor — no code required.
 
 == Description ==
 RT Mega Menu is a powerful and easy-to-use WordPress mega menu builder plugin that transforms your navigation into an engaging, highly customizable menu experience. Designed with flexibility and performance in mind, RT Mega Menu lets you create stunning mega menus using your favorite page builders—without writing a single line of code.
@@ -166,6 +166,14 @@ Yes, there is a free version of the RT Mega Menu plugin available on the WordPre
 10. Menu with Map
 
 == Changelog ==
+
+= 1.4.4 =
+* Added: User-based menu item visibility controls.
+* Added: Location-based menu item visibility controls.
+* Added: Device-based menu item visibility controls.
+* Added: WooCommerce customer visibility rules (Logged-in status, Purchase history, and Cart contents).
+* Fixed: CSS alignment issue for custom image icons.
+
 
 = 1.4.3 =
 * Added: Custom Icon Support
