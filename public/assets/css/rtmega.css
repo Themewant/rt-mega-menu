@@ -234,7 +234,7 @@ ul.menu li.menu-item-has-children:after {
 }
 .rtmega-menu-area ul.rtmega-megamenu > .menu-item .menu-link {
   display: block;
-  display: block;
+  position: relative;
 }
 .rtmega-menu-area ul.rtmega-megamenu > .menu-item.rtmega_menu {
   display: block !important;

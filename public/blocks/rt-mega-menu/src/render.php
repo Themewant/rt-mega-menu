@@ -314,6 +314,7 @@ $block_wrap_attr = get_block_wrapper_attributes( array( 'class' => 'rtmega-block
     <?php 
     $only_mobile_menu_args = $menu_args;
     $only_mobile_menu_args['items_wrap'] = $rtmega_mobile_menu_html;
+    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     echo wp_kses_post( apply_filters( 'rtmega_block_mobile_menu_render', '', $attributes, $only_mobile_menu_args ) );
     ?>
     <?php

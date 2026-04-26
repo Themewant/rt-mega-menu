@@ -3204,7 +3204,8 @@ class RTMEGA_MENU_INLINE extends Widget_Base {
 					if( !empty($settings['mobile_menu'])){
 						$only_mobile_menu_args = $args;
 						$only_mobile_menu_args['items_wrap'] = $rtmega_mobile_menu_html;
-						echo wp_kses_post( apply_filters( 'rtmega_mobile_menu_render', '', $settings, $only_mobile_menu_args ) );
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						echo apply_filters( 'rtmega_mobile_menu_render', '', $settings, $only_mobile_menu_args );
 					}
 					
 

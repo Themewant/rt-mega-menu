@@ -13,7 +13,6 @@
 */
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-
     define( 'RTMEGA_MENU_VERSION', '1.4.4' );
     define( 'RTMEGA_MENU_PL_ROOT', __FILE__ );
     define( 'RTMEGA_MENU_PL_URL', plugins_url( '/', RTMEGA_MENU_PL_ROOT ) );
@@ -39,7 +38,6 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
     include 'apps/vendor/autoload.php';
     include 'apps/Appsero_Tracker.php';
-
 
     RTMEGA_MENU::instance();
     if ( class_exists( '\RtMega\MegaMenu\Tracking\Appsero_Tracker' ) ) {

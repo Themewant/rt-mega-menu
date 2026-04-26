@@ -13,6 +13,7 @@
                 .on('click.RTMegaMenuAdmin', '.delete-rt-menu-item-options', this.deleteRtmegaMenuItemSettings)
                 .on('click.RTMegaMenuAdmin', '.rtmega_pro_warning_img', this.alertForLicenseActive)
                 .on('click.RTMegaMenuAdmin', '.rtmega_set_icon_toggle_in_nav_item_free', this.alertForLicenseActive)
+                .on('click.RTMegaMenuAdmin', '.rtmega-set-visibility-conditions-free', this.alertForLicenseActive)
                 .on('click.RTMegaMenuAdmin', '.rtmega-notice .notice-dismiss', this.ignorePluginNotice)
                 .on('change.RTMegaMenuAdmin', '#rtmega-template-source-select', this.templateSourceChange)
                 .on('click.RTMegaMenuAdmin', '#rtmega-create-new-template', this.createNewTemplate)
@@ -154,8 +155,7 @@
                 }
             });
         },
-        getMenuItemOptions: function (menu_item_id) {
-            console.log('menu_item_id', menu_item_id);
+        getMenuItemOptions: function (menu_item_id, active_tab = 1) {
 
             $.ajax({
                 type: 'POST',
@@ -164,6 +164,7 @@
                     action: "rtmega_get_menu_options",
                     menu_item_id: menu_item_id,
                     nonce: rtmegamenu_ajax.nonce,
+                    active_tab,
                 },
                 cache: false,
                 success: function (response) {
@@ -196,7 +197,6 @@
                 },
                 cache: false,
                 success: function (response) {
-                    // $('.rtmega-menu-switch-wrapper .ajax-loader').removeClass('show');
                     location.reload();
                 }
             });
@@ -259,8 +259,6 @@
                 menu_item_id: menu_item_id,
                 nonce: rtmegamenu_ajax.nonce,
             }
-
-            console.log('data', data);
 
             $.ajax({
                 type: 'POST',
