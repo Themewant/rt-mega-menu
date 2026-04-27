@@ -101,6 +101,7 @@ div#rtmega-menu-setting-modal .rtmega-modal-body {
     display: block;
     margin: auto;
     width: 900px;
+    height: 665px;
     z-index: 9999;
     position: relative;
     background: var(--rtmega-primary-bg);

@@ -270,14 +270,14 @@ if ( !class_exists('RTMEGA_MENU_Admin_Ajax')) {
                             </form>
                         </div>
                         <div id="tab3" class="tab-content visibility-conditions-tab" style="display: <?php echo esc_attr($active_tab_id == '3' ? 'block' : 'none'); ?>;">
-                            <form action="" onsubmit="return false" id='rtmega_menu_items_settings'>    
+                            <form action="" onsubmit="return false" id='rtmega_menu_items_conditions'>
                                 <div class="rtmega-menu-option-inputs">
                                     <ul class="rtmega-menu-option-input-list rtmega-menu-option-input-list rtmega-conditions-list"> 
                                         <li class="pro-features-placeholders d-block">
                                             <img src="<?php echo esc_url(RTMEGA_MENU_PL_URL.'admin/assets/img/visibility_conditions_pro.png'); ?>" class="rtmega_pro_warning_img" alt="badge_pro_condition">
                                             <p class="rtmega-pro-notice rtmega-text-danger"><?php echo esc_html__('Please activate plugin license to use this advanced features', 'rt-mega-menu'); ?></p>
                                         </li>
-                                        <?php do_action( 'rtmega_menu_item_visibility_conditions_content' );?>
+                                        <?php do_action( 'rtmega_menu_item_visibility_conditions_content', $menu_item_id );?>
                                     </ul>
                                 </div>
                             </form>
