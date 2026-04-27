@@ -9,20 +9,25 @@ if ( !class_exists('RTMEGA_MENU_Admin_Ajax')) {
             add_action( "wp_ajax_rtmega_get_menu_options", array ( $this, 'rtmega_get_menu_options' ) );
             add_action( "wp_ajax_rtmega_set_menu_item_mega_button", array ( $this, 'rtmega_set_menu_item_mega_button' ) );
             add_action( "wp_ajax_rtmega_delete_menu_options", array ( $this, 'rtmega_delete_menu_options' ) );
-            add_action( 'wp_nav_menu_item_custom_fields', array( $this, 'rtmega_menu_item_icon' ), 10, 2 );
+            add_action( 'wp_nav_menu_item_custom_fields', array( $this, 'rtmega_menu_item_pro_fields' ), 10, 2 );
             add_action( "wp_ajax_rtmega_get_templates_data_by_source", array ( $this, 'rtmega_get_templates_data_by_source' ) );
             add_action( "wp_ajax_rtmega_create_new_template", array ( $this, 'rtmega_create_new_template' ) );
         }
 
-        function rtmega_menu_item_icon( $item_id, $item ) {
-                ?>
-                    <div class="rtmega_saved_icon_wrapper_free" style="clear: both;">
-                        <div class="rtmega_saved_icon"><i class=""></i></div>
-                        <div class="rtmega_saved_icon_actions">
-                            <button type="button" class="rtmega_set_icon_toggle_in_nav_item_free" data-menu_item_id="<?php echo esc_attr($item_id); ?>"><?php echo 'Add Icon'; ?></button>
+        function rtmega_menu_item_pro_fields( $item_id, $item ) {
+                ?>  
+                    <div class="rtmega-pro-nav-fields">
+                        <hr>
+                            <div class="rtmega_saved_icon_wrapper_free" style="clear: both;">
+                            <div class="rtmega_saved_icon"><i class=""></i></div>
+                            <div class="rtmega_saved_icon_actions">
+                                <button type="button" class="rtmega_set_icon_toggle_in_nav_item_free" data-menu_item_id="<?php echo esc_attr($item_id); ?>"><?php echo 'Add Icon'; ?></button>
+                            </div>
                         </div>
+                        <button type="button" class="button rtmega-set-visibility-conditions rtmega-set-visibility-conditions-free"><?php echo esc_html__( 'Visibility Conditions', 'rt-mega-menu' )?></button>
+                        <hr>
                     </div>
-                    <hr>
+                    
                 <?php
         }
 
