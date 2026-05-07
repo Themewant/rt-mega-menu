@@ -16,7 +16,7 @@ function closeRTMEGAmobile() {
             this.enableAccordion();
             this.enableHeaderScript();
             $(document)
-                .on('click.RTmegaMenu', '.rtmega-menu-vertical-expand-button-wrapper a', this.expandVerticalMenu)
+                .on('click.RTmegaMenu', '.rtmega-menu-vertical-expand-button-wrapper button', this.expandVerticalMenu)
                 .on('click.RTmegaMenu', '.rtmega-menu-top-style-cls', this.closeRTMEGAmobile_top);
         },
         expandVerticalMenu: function (e) {
