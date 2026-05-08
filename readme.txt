@@ -173,6 +173,7 @@ Yes, there is a free version of the RT Mega Menu plugin available on the WordPre
 
 = 1.4.7 =
 * Fixed: Seo Analysis issue menu toggle button
+* Added: Astra Theme Mobile Menu Compatible
 
 = 1.4.6 =
 * Fixed: CSS not loading issue for Atomic Widgets.
