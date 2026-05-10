@@ -29,6 +29,9 @@ function closeRTMEGAmobile() {
             document.querySelectorAll('.ast-mobile-header-wrap .ast-mobile-header-content').forEach(element => {
                 element.classList.toggle('opened');
             });
+            document.querySelectorAll('.ast-mobile-header-content .mobile-menu-area').forEach(element => {
+                element.classList.toggle('opened');
+            });
         },
         expandVerticalMenu: function (e) {
             e.preventDefault();
