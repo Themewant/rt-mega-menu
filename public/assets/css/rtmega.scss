@@ -468,10 +468,10 @@ ul.menu li.menu-item-has-children:after {
                 transition: transform 0.8s;
                 transition-timing-function: ease;
                 transition-timing-function: cubic-bezier(0.9, 0, 0.3, 1);
+            }
 
-                ul.submenu {
-                    display: block;
-                }
+            ul.submenu {
+                display: block;
             }
         }
 
