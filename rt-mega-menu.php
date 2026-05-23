@@ -26,6 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
     include 'admin/includes/menu-metabox.php';
     include 'admin/includes/plugin-scripts.php';
     include 'admin/includes/admin-ajax-request.php';
+    include 'admin/includes/NoticeDashboard/NoticeDashboard.php';
 
     include 'public/includes/plugin-scripts.php';
     include 'public/includes/rtmega-nav-walker.php';
