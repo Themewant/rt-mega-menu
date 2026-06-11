@@ -8,9 +8,6 @@ function rtmega_menu_admin_enqueue_scripts (){
     wp_enqueue_style( 'wp-color-picker');
     wp_enqueue_script( 'wp-color-picker');
 
-    // enqueue fontawesome
-    wp_enqueue_style( 'rtmegamenu-fontawesome', RTMEGA_MENU_PL_URL . 'admin/assets/lib/font-awesome/css/all.min.css', array(), RTMEGA_MENU_VERSION );
-
     wp_enqueue_style( 'rtmegamenu-admin-style', RTMEGA_MENU_PL_URL . 'admin/assets/css/rtmega-menu-admin.css', array(), RTMEGA_MENU_VERSION );
 
     $rtmega_admin_js_deps = array('jquery');
@@ -30,8 +27,12 @@ function rtmega_menu_admin_enqueue_scripts (){
 
     $current_user = wp_get_current_user();
 
-    // Logic for menu data
-    $selected_menu_id = isset( $_REQUEST['menu'] ) ? absint( $_REQUEST['menu'] ) : 0;
+    // Logic for menu data.
+    // Reading the current menu ID from the nav-menus admin URL (idempotent GET on an
+    // authenticated admin screen) so the JS can know which menu is being edited.
+    // No nonce required — this does not write state and is gated by the admin page capability.
+    // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+    $selected_menu_id = isset( $_REQUEST['menu'] ) ? absint( wp_unslash( $_REQUEST['menu'] ) ) : 0;
     if ( ! $selected_menu_id ) {
         $selected_menu_id = get_user_option( 'nav_menu_recently_edited' );
     }
@@ -75,6 +76,7 @@ function rtmega_menu_admin_enqueue_scripts (){
                 [
                     'ajaxurl'          => admin_url( 'admin-ajax.php' ),
                     'adminURL'         => admin_url(),
+                    'postEditUrl'      => admin_url( 'post.php?action=edit&post=' ),    
                     'elementorURL'     => admin_url( 'edit.php?post_type=elementor_library' ),
                     'nonce'            => wp_create_nonce('rtmega_templates_import_nonce'),
                     'version'          => RTMEGA_MENU_VERSION,

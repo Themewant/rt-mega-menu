@@ -5,7 +5,7 @@
  * Plugin URI:  https://rtmega.themewant.com/
  * Author:      Themewant
  * Author URI:  http://themewant.com/
- * Version:     1.4.1
+ * Version:     1.5.1
  * License:     GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: rt-mega-menu
@@ -13,8 +13,7 @@
 */
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-
-    define( 'RTMEGA_MENU_VERSION', '1.4.1' );
+    define( 'RTMEGA_MENU_VERSION', '1.5.1' );
     define( 'RTMEGA_MENU_PL_ROOT', __FILE__ );
     define( 'RTMEGA_MENU_PL_URL', plugins_url( '/', RTMEGA_MENU_PL_ROOT ) );
     define( 'RTMEGA_MENU_PL_PATH', plugin_dir_path( RTMEGA_MENU_PL_ROOT ) );
@@ -27,6 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
     include 'admin/includes/menu-metabox.php';
     include 'admin/includes/plugin-scripts.php';
     include 'admin/includes/admin-ajax-request.php';
+    include 'admin/includes/NoticeDashboard/NoticeDashboard.php';
 
     include 'public/includes/plugin-scripts.php';
     include 'public/includes/rtmega-nav-walker.php';
@@ -34,28 +34,16 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
     include 'public/includes/rtmega-dynamic-css.php';
     include 'public/includes/class.helper.php';
     include 'admin/includes/template-library.php';
-    include 'admin/includes/notice.php';
     include 'class.rtmega-menu.php';
     include 'public/blocks/blocks.php';
-    
+
+    include 'apps/vendor/autoload.php';
+    include 'apps/Appsero_Tracker.php';
+
     RTMEGA_MENU::instance();
-   
-    
-    add_action( 'plugins_loaded', 'rtmega_appsero_init_tracker' );
-
-    function rtmega_appsero_init_tracker() {
-
-        if ( ! class_exists( 'Appsero\Client' ) ) {
-        require_once __DIR__ . '/apps/Client.php';
-        }
-
-        $client = new Appsero\Client( '1e51d718-e4b3-4fb7-bc97-7845f1f2d007', 'RT Mega Menu', __FILE__ );
-
-        // Active insights
-        $client->insights()->init();
-
+    if ( class_exists( '\RtMega\MegaMenu\Tracking\Appsero_Tracker' ) ) {
+        \RtMega\MegaMenu\Tracking\Appsero_Tracker::instance();
     }
-
 
 
 

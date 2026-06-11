@@ -1,14 +1,14 @@
 function openRTMEGAmobile() {
-    document.querySelector('.enabled-mobile-menu .mobile-menu-area').classList.add('opened');
-    event.preventDefault();
+    document.querySelectorAll('.enabled-mobile-menu .mobile-menu-area').forEach(element => {
+        element.classList.add('opened');
+    });
 }
 
 function closeRTMEGAmobile() {
-    document.querySelector('.enabled-mobile-menu .mobile-menu-area').classList.remove('opened');
-    event.preventDefault();
+    document.querySelectorAll('.enabled-mobile-menu .mobile-menu-area').forEach(element => {
+        element.classList.remove('opened');
+    });
 }
-
-
 (function ($) {
 
     RTmegaMenu = {
@@ -16,8 +16,22 @@ function closeRTMEGAmobile() {
             this.enableAccordion();
             this.enableHeaderScript();
             $(document)
-                .on('click.RTmegaMenu', '.rtmega-menu-vertical-expand-button-wrapper a', this.expandVerticalMenu)
+                .on('click.RTmegaMenu', '.rtmega-menu-vertical-expand-button-wrapper button', this.expandVerticalMenu)
                 .on('click.RTmegaMenu', '.rtmega-menu-top-style-cls', this.closeRTMEGAmobile_top);
+
+            // compatible with astra theme mobile menu
+            $(document).on('click.RTmegaMenu', '.ast-mobile-header-wrap .main-header-menu-toggle', this.openCloseRTMEGAmobile_astra);
+
+        },
+        openCloseRTMEGAmobile_astra: function (e) {
+            e.preventDefault();
+            console.log("openRTMEGAmobile_astra");
+            document.querySelectorAll('.ast-mobile-header-wrap .ast-mobile-header-content').forEach(element => {
+                element.classList.toggle('opened');
+            });
+            document.querySelectorAll('.ast-mobile-header-content .mobile-menu-area').forEach(element => {
+                element.classList.toggle('opened');
+            });
         },
         expandVerticalMenu: function (e) {
             e.preventDefault();
@@ -28,9 +42,9 @@ function closeRTMEGAmobile() {
             }
         },
         enableAccordion: function ($scope) {
-            var $selector = $(".rtmega-menu-area .mobile-menu-area .rtmega-menu-mobile-sidebar .rtmega-megamenu, .rtmega-menu-area .rtmega-megamenu.vertical.vertical-submenu-expand-mode-click");
+            var $selector = $(".rtmega-menu-area .mobile-menu-area .rtmega-megamenu, .rtmega-menu-area .rtmega-megamenu.vertical.vertical-submenu-expand-mode-click");
             if ($scope) {
-                $selector = $scope.find(".rtmega-menu-area .mobile-menu-area .rtmega-menu-mobile-sidebar .rtmega-megamenu, .rtmega-menu-area .rtmega-megamenu.vertical.vertical-submenu-expand-mode-click");
+                $selector = $scope.find(".rtmega-menu-area .mobile-menu-area .rtmega-megamenu, .rtmega-menu-area .rtmega-megamenu.vertical.vertical-submenu-expand-mode-click");
             }
             // Prevent double initialization
             $selector = $selector.not('.mg-accordion');

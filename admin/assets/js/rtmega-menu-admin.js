@@ -13,9 +13,11 @@
                 .on('click.RTMegaMenuAdmin', '.delete-rt-menu-item-options', this.deleteRtmegaMenuItemSettings)
                 .on('click.RTMegaMenuAdmin', '.rtmega_pro_warning_img', this.alertForLicenseActive)
                 .on('click.RTMegaMenuAdmin', '.rtmega_set_icon_toggle_in_nav_item_free', this.alertForLicenseActive)
+                .on('click.RTMegaMenuAdmin', '.rtmega-set-visibility-conditions-free', this.alertForLicenseActive)
                 .on('click.RTMegaMenuAdmin', '.rtmega-notice .notice-dismiss', this.ignorePluginNotice)
                 .on('change.RTMegaMenuAdmin', '#rtmega-template-source-select', this.templateSourceChange)
                 .on('click.RTMegaMenuAdmin', '#rtmega-create-new-template', this.createNewTemplate)
+                .on('change.RTMegaMenuAdmin', '#rtmega-template-select', this.templateChange)
                 ;
         },
         renderMenuOptions: function () {
@@ -153,8 +155,7 @@
                 }
             });
         },
-        getMenuItemOptions: function (menu_item_id) {
-            console.log('menu_item_id', menu_item_id);
+        getMenuItemOptions: function (menu_item_id, active_tab = 1) {
 
             $.ajax({
                 type: 'POST',
@@ -163,6 +164,7 @@
                     action: "rtmega_get_menu_options",
                     menu_item_id: menu_item_id,
                     nonce: rtmegamenu_ajax.nonce,
+                    active_tab,
                 },
                 cache: false,
                 success: function (response) {
@@ -195,7 +197,6 @@
                 },
                 cache: false,
                 success: function (response) {
-                    // $('.rtmega-menu-switch-wrapper .ajax-loader').removeClass('show');
                     location.reload();
                 }
             });
@@ -233,17 +234,31 @@
                 }
             });
 
+            var conditions = {};
+            $('#rtmega_menu_items_conditions').find('input, select').each(function () {
+                if ($(this).attr('type') === 'submit') return;
+                var name = $(this).attr('name');
+                if (!name) return;
+                if ($(this).attr('type') === 'checkbox') {
+                    conditions[name] = $(this).is(':checked') ? 'on' : 'off';
+                } else if ($(this).is('select[multiple]')) {
+                    var vals = $(this).val();
+                    conditions[name] = vals && vals.length ? vals.join(',') : '';
+                } else {
+                    conditions[name] = $(this).val();
+                }
+            });
+
             let data = {
                 action: "rtmega_update_menu_options",
                 actualAction: 'saveMenuItemSettings',
                 settings: settings,
                 css: css,
+                conditions: conditions,
                 menu_id: menu_id,
                 menu_item_id: menu_item_id,
                 nonce: rtmegamenu_ajax.nonce,
             }
-
-            console.log('data', data);
 
             $.ajax({
                 type: 'POST',
@@ -294,25 +309,49 @@
                     });
                     template_select.html(options);
 
+
                     if (response.data.add_new_link) {
                         $('.rtmega-template-not-found-message').show();
                         $('#rtmega-menu-setting-modal #edit-remega-selected-template').hide();
+                        $('#rtmega-menu-setting-modal #add-remega-template').hide();
                         template_select.hide();
                         // update edit link
                         let add_new_link = response.data.add_new_link;
                         $('#rtmega-menu-setting-modal #rtmega-create-new-template').attr('href', add_new_link);
                     } else {
                         $('.rtmega-template-not-found-message').hide();
-                        $('#rtmega-menu-setting-modal #edit-remega-selected-template').show();
+                        $('#rtmega-menu-setting-modal #add-remega-template').show();
+
+
                         // update edit link
-                        let edit_link = response.data[0].edit_link;
-                        $('#rtmega-menu-setting-modal #edit-remega-selected-template').attr('href', edit_link);
+                        let current_template_id = response.data.current_template_id;
+                        if (current_template_id) {
+                            let edit_link = response.data[0].edit_link;
+                            $('#rtmega-menu-setting-modal #edit-remega-selected-template').attr('href', edit_link);
+                            $('#rtmega-menu-setting-modal #edit-remega-selected-template').show();
+                        }
+                        template_select.show();
                     }
 
 
                     RTMegaMenuAdmin.hideMegaMenuModalAjaxLoader($(this));
                 }
             });
+        },
+        templateChange: function () {
+            // prevent default
+            event.preventDefault();
+            const template_select = $('#rtmega-menu-setting-modal #rtmega-template-select');
+
+            // update edit link
+            let template_id = template_select.val();
+            if (template_id) {
+                let edit_link = rtmegamenu_ajax.postEditUrl + template_id;
+                $('#rtmega-menu-setting-modal #edit-remega-selected-template').attr('href', edit_link);
+                $('#rtmega-menu-setting-modal #edit-remega-selected-template').show();
+            } else {
+                $('#rtmega-menu-setting-modal #edit-remega-selected-template').hide();
+            }
         },
         createNewTemplate: function () {
 
