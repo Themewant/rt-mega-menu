@@ -146,11 +146,19 @@ class RTMEGA_NoticeDashboard {
         // contract; renaming it would break the connection to the API.
         $notice_source_url = trailingslashit( RTMEGA_NOTICE_SOURCE_URL ) . 'wp-json/reacthemes/v1/get_thewtmc';
 
+        // Cache the remote response so this API is not requested on every admin
+        // page load (the request blocks page rendering until it returns).
+        $cache_key = 'rtmega_dash_notice_' . md5( wp_json_encode( $args ) );
+        $cached    = get_transient( $cache_key );
+        if ( false !== $cached ) {
+            return $cached;
+        }
+
         $response = wp_remote_post(
             $notice_source_url,
             array(
                 'headers'     => array( 'Content-Type' => 'application/json' ),
-                'timeout'     => 30,
+                'timeout'     => 10,
                 'redirection' => 5,
                 'blocking'    => true,
                 'sslverify'   => false,
@@ -160,10 +168,58 @@ class RTMEGA_NoticeDashboard {
         );
 
         if ( is_wp_error( $response ) ) {
+            // Cache the failure briefly so a slow/unreachable remote does not
+            // block every admin page load while it is down.
+            set_transient( $cache_key, '', 10 * MINUTE_IN_SECONDS );
             return '';
         }
 
-        return wp_remote_retrieve_body( $response );
+        $notice_body = wp_remote_retrieve_body( $response );
+        set_transient( $cache_key, $notice_body, 12 * HOUR_IN_SECONDS );
+
+        return $notice_body;
+    }
+
+    /**
+     * Per-request dedup: when more than one ThemeWant plugin ships this
+     * NoticeDashboard, each makes its own API call and gets back the same
+     * global/multi-targeted notices. We claim each notice_id once across
+     * plugins so it's only rendered by whichever instance reaches it first.
+     *
+     * Two separate pools because notice-bar and widget use different screen
+     * contexts on the API and never share IDs.
+     */
+    private function claim_noticebar_id( $notice_id ) {
+        if ( empty( $notice_id ) ) {
+            return false;
+        }
+        if ( ! isset( $GLOBALS['thewtmc_noticebar_claims'] ) ) {
+            $GLOBALS['thewtmc_noticebar_claims'] = array();
+        }
+        if ( isset( $GLOBALS['thewtmc_noticebar_claims'][ $notice_id ] ) ) {
+            return false;
+        }
+        $GLOBALS['thewtmc_noticebar_claims'][ $notice_id ] = true;
+        return true;
+    }
+
+    /**
+     * Fetch widget-screen notices once per request and cache. Called from
+     * both the wp_dashboard_setup phase (to decide whether to register the
+     * widget at all) and from the widget callback (to render).
+     */
+    private function fetch_widget_notices_once() {
+        if ( $this->cached_widget_notices !== null ) {
+            return $this->cached_widget_notices;
+        }
+        $body = $this->RTMEGA_notice_get_notices( array( 'screen' => 'in-widget' ) );
+        if ( empty( $body ) ) {
+            $this->cached_widget_notices = array();
+            return $this->cached_widget_notices;
+        }
+        $decoded = json_decode( $body, true );
+        $this->cached_widget_notices = is_array( $decoded ) ? $decoded : array();
+        return $this->cached_widget_notices;
     }
 
     /**
