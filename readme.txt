@@ -176,6 +176,7 @@ Yes, there is a free version of the RT Mega Menu plugin available on the WordPre
 == Changelog ==
 
 = 1.5.1 =
+* Improved: Speed Optimization 
 * Fixed: Gutenberg blocks not showing issues
 
 = 1.5.0 =
