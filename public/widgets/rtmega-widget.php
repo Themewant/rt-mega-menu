@@ -208,16 +208,10 @@ class RTMEGA_MENU_INLINE extends Widget_Base {
 			'mobile_menu_pro_notice',
 			[
 				'type' => Controls_Manager::RAW_HTML,
-				'raw'  => '<div style="position:relative;pointer-events:none;opacity:0.6;">
-					<label class="elementor-control-title">' . __( 'Mobile Menu', 'rt-mega-menu' ) . '</label>
-					<select class="elementor-control-input-wrapper" disabled style="width:100%;margin-top:6px;padding:6px 8px;border:1px solid #d5dadf;border-radius:3px;background:#f9f9f9;color:#555;cursor:not-allowed;">
-						<option>' . __( '— Select a menu —', 'rt-mega-menu' ) . '</option>
-					</select>
-				</div>
-				<div style="margin-top:8px;padding:8px 10px;border-left:3px solid #f0ad00;border-radius:2px;font-size:12px;line-height:1.5;">
+				'raw'  => '<div style="padding:8px 10px;border-left:3px solid #f0ad00;border-radius:2px;font-size:12px;line-height:1.5;">
 					' . sprintf(
 						/* translators: %s: URL to the RT Mega Menu Pro upgrade page. */
-						__( '<strong>Mobile Menu</strong> is a <a href="%s" target="_blank" style="color:#f0ad00;pointer-events:auto;">Pro feature</a>. Upgrade to set a separate menu for mobile devices.', 'rt-mega-menu' ),
+						__( '<strong>Mobile Menu</strong> is a <a href="%s" target="_blank" style="color:#f0ad00;pointer-events:auto;">Upgrade to Pro</a>. Upgrade to set a separate menu for mobile devices.', 'rt-mega-menu' ),
 						'https://themewant.com/downloads/rt-mega-menu-pro/'
 					) . '
 				</div>',
