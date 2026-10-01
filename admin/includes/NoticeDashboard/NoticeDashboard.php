@@ -218,18 +218,43 @@ class RTMEGA_NoticeDashboard {
         return $this->cached_widget_notices;
     }
 
-    public function expire_notice_by_date( $notice_id, $expire_timestamp ) {
+    /**
+     * Is the current admin screen one of this plugin's own pages?
+     *
+     * A notice hooked to admin_notices renders on every screen in wp-admin,
+     * including screens belonging to other plugins. Guideline 11 treats that as
+     * hijacking the dashboard, so the notice bar is limited to the pages this
+     * plugin adds itself -- its own settings page and the Templates Library
+     * submenu. Notice content and dismissals are unaffected.
+     *
+     * @return bool True when the current screen belongs to this plugin.
+     */
+    private function RTMEGA_notice_is_plugin_screen() {
 
-        $today_date      = gmdate( 'Y-m-d' );
-        $today_timestamp = strtotime( $today_date );
-
-        if ( $today_timestamp >= $expire_timestamp ) {
-            $user_id = get_current_user_id();
-            delete_user_meta( $user_id, 'thewtmc_notice_ignore_' . $notice_id );
+        if ( ! function_exists( 'get_current_screen' ) ) {
+            return false;
         }
+
+        $screen = get_current_screen();
+
+        if ( ! $screen || empty( $screen->id ) ) {
+            return false;
+        }
+
+        foreach ( array( 'rt-mega-menu', 'rtmegamenu' ) as $slug ) {
+            if ( false !== strpos( $screen->id, $slug ) ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function RTMEGA_notice_add_to_notice_bar() {
+
+        if ( ! $this->RTMEGA_notice_is_plugin_screen() ) {
+            return;
+        }
 
         $args = array( 'screen' => 'notice-bar' );
 
@@ -255,8 +280,6 @@ class RTMEGA_NoticeDashboard {
             $content          = isset( $notice['content'] ) ? $notice['content'] : '';
             $action_buttons   = isset( $notice['action_buttons'] ) ? $notice['action_buttons'] : array();
             $expire_timestamp = isset( $notice['expire_date'] ) ? strtotime( $notice['expire_date'] ) : '';
-
-            $this->expire_notice_by_date( $notice_id, $expire_timestamp );
 
             $notice_ignore_status = $this->get_notice_status( $notice_id );
 
@@ -334,6 +357,10 @@ class RTMEGA_NoticeDashboard {
             return;
         }
 
+        // Registered with a low priority and left wherever WordPress places it.
+        // Rewriting $wp_meta_boxes to force this widget above core's own is what
+        // guideline 11 calls hijacking the dashboard. The widget itself is
+        // unchanged, and a user can still move or hide it from Screen Options.
         wp_add_dashboard_widget(
             'RTMEGA_notice_widget',
             'ThemeWant Stories',
@@ -341,23 +368,8 @@ class RTMEGA_NoticeDashboard {
             null,
             null,
             'normal',
-            'high'
+            'low'
         );
-
-        global $wp_meta_boxes;
-
-        if ( ! isset( $wp_meta_boxes['dashboard']['normal']['high']['RTMEGA_notice_widget'] ) ) {
-            return;
-        }
-
-        $my_widget = array(
-            'RTMEGA_notice_widget' => $wp_meta_boxes['dashboard']['normal']['high']['RTMEGA_notice_widget'],
-        );
-
-        unset( $wp_meta_boxes['dashboard']['normal']['high']['RTMEGA_notice_widget'] );
-
-        $wp_meta_boxes['dashboard']['normal']['high'] =
-            $my_widget + $wp_meta_boxes['dashboard']['normal']['high'];
     }
 
     public function RTMEGA_notice_widget_callback() {
@@ -387,8 +399,6 @@ class RTMEGA_NoticeDashboard {
             if ( empty( $sub_title ) ) {
                 $sub_title = $this->get_active_plugin_display_name();
             }
-
-            $this->expire_notice_by_date( $notice_id, $expire_timestamp );
 
             if ( ! isset( $this->my_widget_notice_ids[ $notice_id ] ) ) {
                 continue;

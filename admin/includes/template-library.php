@@ -128,7 +128,7 @@ class RTMEGA_MENU_Template_Library{
                     wp_send_json_error(
                         array(
                         'license' => $license_status, 
-                        'message' => 'Please acivate RTMega Premium License to import this template!',
+                        'message' => esc_html__( 'Please activate your RT Mega Menu Premium license to import this template.', 'rt-mega-menu' ),
                         )
                     );
                 }

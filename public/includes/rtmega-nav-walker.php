@@ -166,7 +166,7 @@ class RTMEGA_Nav_Walker extends Walker_Nav_Menu {
 
     // Build HTML output and pass through the proper filter.
 
-    $pointer_hover_effect = isset($args->pointer_hover_effect) && !empty($args->pointer_hover_effect) ? '<span class="pointer-'.$args->pointer_hover_effect.'"></span>' : '';
+    $pointer_hover_effect = isset($args->pointer_hover_effect) && !empty($args->pointer_hover_effect) ? '<span class="pointer-' . esc_attr( $args->pointer_hover_effect ) . '"></span>' : '';
     $vertical_menu_custom_icon = isset( $args->menu_arrow_vertical_custom ) && !empty($args->menu_arrow_vertical_custom) ? $args->menu_arrow_vertical_custom : '';
 
     $item_output = sprintf( '%1$s<a%2$s>%3$s%4$s%5$s%6$s</a>%7$s',

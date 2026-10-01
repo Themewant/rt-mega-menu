@@ -23,16 +23,20 @@ function rtmega_menu_admin_enqueue_scripts (){
     wp_enqueue_script( 'rtmegamenu-admin', RTMEGA_MENU_PL_URL . 'admin/assets/js/rtmega-menu-admin.js', $rtmega_admin_js_deps, RTMEGA_MENU_VERSION, TRUE );
     wp_enqueue_script( 'rtmegamenu-template', RTMEGA_MENU_PL_URL . 'admin/assets/js/rtmega-template.js', array('jquery'), RTMEGA_MENU_VERSION, TRUE );
 
-    $pro_warning_msg = 'Please use Premium Verison of this plugin to use this advanced features!';
-    if ( get_option( 'rtmega_license_key' ) !== false ) {
-        $pro_warning_msg = 'Please activate plugin license to use this advanced features!';
+    // Tab switching and the colour picker on the plugin's own settings screen.
+    // This used to be printed inline at the bottom of admin-settings.php.
+    if ( is_object( $screen ) && 'toplevel_page_rt-mega-menu' === $screen->id ) {
+        wp_enqueue_script( 'rtmegamenu-settings', RTMEGA_MENU_PL_URL . 'admin/assets/js/rtmega-settings.js', array( 'jquery', 'wp-color-picker' ), RTMEGA_MENU_VERSION, true );
     }
 
 
     $current_user = wp_get_current_user();
 
-    // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-    $selected_menu_id = isset( $_REQUEST['menu'] ) ? absint( wp_unslash( $_REQUEST['menu'] ) ) : 0;
+    // Which menu's settings to hand to the admin script. This is a read-only
+    // screen selector, not form processing: filter_input() validates the type
+    // and the whole function has already returned for anyone without
+    // edit_theme_options.
+    $selected_menu_id = absint( filter_input( INPUT_GET, 'menu', FILTER_VALIDATE_INT ) );
     if ( ! $selected_menu_id ) {
         $selected_menu_id = get_user_option( 'nav_menu_recently_edited' );
     }
@@ -83,7 +87,6 @@ function rtmega_menu_admin_enqueue_scripts (){
                     'pluginURL'        => plugin_dir_url( __FILE__ ),
                     'ajaxLoaderUrl'    => RTMEGA_MENU_PL_URL . 'admin/assets/img/ajax-loader.gif',
                     'packagedesc'      => __( 'Templates in this package', 'rt-mega-menu' ),
-                    'rtmega_pro_warning_msg' => ( $pro_warning_msg ),
                     'rtmega_menu_options_switch' => $rtmega_menu_options_switch,
                     'rtmega_active_menu_items' => $rtmega_active_menu_items,
                     'user'             => [

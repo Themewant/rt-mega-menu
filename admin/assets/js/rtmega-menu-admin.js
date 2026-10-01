@@ -11,9 +11,6 @@
                 .on('click.RTMegaMenuAdmin', '.rtmega-menu-modal-closer', this.closeMegaMenuModal)
                 .on('click.RTMegaMenuAdmin', '.save-rt-menu-item-options', this.updateRtmegaMenuItemSettings)
                 .on('click.RTMegaMenuAdmin', '.delete-rt-menu-item-options', this.deleteRtmegaMenuItemSettings)
-                .on('click.RTMegaMenuAdmin', '.rtmega_pro_warning_img', this.alertForLicenseActive)
-                .on('click.RTMegaMenuAdmin', '.rtmega_set_icon_toggle_in_nav_item_free', this.alertForLicenseActive)
-                .on('click.RTMegaMenuAdmin', '.rtmega-set-visibility-conditions-free', this.alertForLicenseActive)
                 .on('click.RTMegaMenuAdmin', '.rtmega-notice .notice-dismiss', this.ignorePluginNotice)
                 .on('change.RTMegaMenuAdmin', '#rtmega-template-source-select', this.templateSourceChange)
                 .on('click.RTMegaMenuAdmin', '#add-remega-template, #rtmega-create-new-template', this.createNewTemplate)
@@ -56,9 +53,6 @@
                     });
                 }
             }
-        },
-        alertForLicenseActive: function () {
-            alert(rtmegamenu_ajax.rtmega_pro_warning_msg);
         },
         adminSettingsTabs: function () {
             // Show the first tab and hide the rest

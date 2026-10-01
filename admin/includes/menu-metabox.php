@@ -69,7 +69,9 @@ if ( !class_exists('RTMEGA_MENU_Nav')) {
                                     <ul id="tabs-nav">
                                         <li><a href="#tab1"><?php echo esc_html__( 'Content Template', 'rt-mega-menu' )?></a></li>
                                         <li><a href="#tab2"><?php echo esc_html__( 'Style', 'rt-mega-menu' )?></a></li>
+                                        <?php if ( has_action( 'rtmega_menu_item_visibility_conditions_content' ) ) : ?>
                                         <li><a href="#tab3"><?php echo esc_html__( 'Conditions', 'rt-mega-menu' )?></a></li>
+                                        <?php endif; ?>
                                         <?php do_action( 'rtmega_menu_item_tab_nav' ); ?>
                                     </ul> <!-- END tabs-nav -->
                                     <div class="tab-contents-wrapper">

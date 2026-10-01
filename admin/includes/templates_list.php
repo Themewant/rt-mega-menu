@@ -5,7 +5,7 @@
  * The 'check_rt_mega_license_status' filter has a project prefix ('rt_mega_') and
  * is part of the free↔pro contract; renaming it would break backward compatibility.
  */
-// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- this file is included inside a method; its $-variables are locals of that scope, not globals.
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  ?>
 <div class="rtmega-templates-library">
@@ -84,7 +84,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
                     <div class="premium-notice">
                         <img src="<?php echo esc_url(RTMEGA_MENU_PL_URL.'admin/assets/img/premium.png'); ?>" alt="Premium Icon">
-                        <h2 class="rtmega-text-success"><?php esc_html_e( 'Please acivate RTMega Premium License to import this template!', 'rt-mega-menu' ); ?></h2>
+                        <h2 class="rtmega-text-success"><?php esc_html_e( 'Please activate your RT Mega Menu Premium license to import this template.', 'rt-mega-menu' ); ?></h2>
                         <h3><a href="<?php echo esc_url(RTMEGA_PRO_SITE_URL); ?>" target="_blank"><?php esc_html_e( 'Buy premium license', 'rt-mega-menu' ); ?></a></h3>
                     </div>
                     

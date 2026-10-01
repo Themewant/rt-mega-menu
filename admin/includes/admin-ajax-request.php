@@ -9,27 +9,10 @@ if ( !class_exists('RTMEGA_MENU_Admin_Ajax')) {
             add_action( "wp_ajax_rtmega_get_menu_options", array ( $this, 'rtmega_get_menu_options' ) );
             add_action( "wp_ajax_rtmega_set_menu_item_mega_button", array ( $this, 'rtmega_set_menu_item_mega_button' ) );
             add_action( "wp_ajax_rtmega_delete_menu_options", array ( $this, 'rtmega_delete_menu_options' ) );
-            add_action( 'wp_nav_menu_item_custom_fields', array( $this, 'rtmega_menu_item_pro_fields' ), 10, 2 );
             add_action( "wp_ajax_rtmega_get_templates_data_by_source", array ( $this, 'rtmega_get_templates_data_by_source' ) );
             add_action( "wp_ajax_rtmega_create_new_template", array ( $this, 'rtmega_create_new_template' ) );
         }
 
-        function rtmega_menu_item_pro_fields( $item_id, $item ) {
-                ?>  
-                    <div class="rtmega-pro-nav-fields">
-                        <hr>
-                            <div class="rtmega_saved_icon_wrapper_free" style="clear: both;">
-                            <div class="rtmega_saved_icon"><i class=""></i></div>
-                            <div class="rtmega_saved_icon_actions">
-                                <button type="button" class="rtmega_set_icon_toggle_in_nav_item_free" data-menu_item_id="<?php echo esc_attr($item_id); ?>"><?php esc_html_e( 'Add Icon', 'rt-mega-menu' ); ?></button>
-                            </div>
-                        </div>
-                        <button type="button" class="button rtmega-set-visibility-conditions rtmega-set-visibility-conditions-free"><?php echo esc_html__( 'Visibility Conditions', 'rt-mega-menu' )?></button>
-                        <hr>
-                    </div>
-                    
-                <?php
-        }
 
         public function rtmega_update_menu_options() {
 
@@ -224,7 +207,11 @@ if ( !class_exists('RTMEGA_MENU_Admin_Ajax')) {
 
                                 $elementor_library_query_args = array(
                                     'post_type' => $template_source == 'elementor' ? 'elementor_library' : 'rtmega_menu',
+                                    // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostsPerPage_posts_per_page -- This fills the admin template dropdown, which has to list every template the user has built; a cap would silently hide some of them. The query below asks for no row count and no object caches, and it only runs on an admin AJAX request.
                                     'posts_per_page' => -1,
+                                    'no_found_rows' => true,
+                                    'update_post_meta_cache' => false,
+                                    'update_post_term_cache' => false,
                                     'orderby' => 'id',
                                     'order' => 'DESC',
                                     // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in -- Excluding the Elementor active kit (single ID) from template lists; negligible perf cost.
@@ -284,20 +271,6 @@ if ( !class_exists('RTMEGA_MENU_Admin_Ajax')) {
                                             <a href="<?php echo esc_url( admin_url('post.php?post='. esc_attr( $content_tempalte ) .'&action=edit' ) ) ?>" id="add-remega-template" class="button" target="_blank" style="<?php echo esc_attr( $elementor_library_query->have_posts() ? '' : 'display: none;'); ?>"><?php echo esc_html__('Add New', 'rt-mega-menu'); ?></a>
                                            
                                         </li>
-                                        <li class="pro-features-placeholders">
-                                            <div class="option-label"><?php echo esc_html__('Badge', 'rt-mega-menu'); ?> : </div>
-                                            <div class="option-inputs">
-                                                <img src="<?php echo esc_url( RTMEGA_MENU_PL_URL.'admin/assets/img/badge_pro_condition.png'); ?>" class="rtmega_pro_warning_img" alt="badge_pro_condition">
-                                                <p class="rtmega-pro-notice rtmega-text-danger"><?php echo esc_html__('Please activate plugin license to use this advanced features', 'rt-mega-menu'); ?></p>
-                                            </div>
-                                        </li>
-                                        <li class="pro-features-placeholders">   
-                                            <div class="option-label"><?php echo esc_html__('Icon', 'rt-mega-menu'); ?> : </div>
-                                            <div class="option-inputs">
-                                                <img src="<?php echo esc_url( RTMEGA_MENU_PL_URL.'admin/assets/img/icon_pro_condition.png'); ?>" class="rtmega_pro_warning_img" alt="icon_pro_condition">
-                                                <p class="rtmega-pro-notice rtmega-text-danger"><?php echo esc_html__('Please activate plugin license to use this advanced features', 'rt-mega-menu'); ?></p>
-                                            </div>
-                                        </li>
                                         <?php
                                         // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- rt_mega_menu suffix; intentional extensibility hook consumed by rt-mega-menu-pro.
                                         do_action( 'after_content_options_rt_mega_menu' );
@@ -350,10 +323,6 @@ if ( !class_exists('RTMEGA_MENU_Admin_Ajax')) {
                             <form action="" onsubmit="return false" id='rtmega_menu_items_conditions'>
                                 <div class="rtmega-menu-option-inputs">
                                     <ul class="rtmega-menu-option-input-list rtmega-menu-option-input-list rtmega-conditions-list"> 
-                                        <li class="pro-features-placeholders d-block">
-                                            <img src="<?php echo esc_url(RTMEGA_MENU_PL_URL.'admin/assets/img/visibility_conditions_pro.png'); ?>" class="rtmega_pro_warning_img" alt="badge_pro_condition">
-                                            <p class="rtmega-pro-notice rtmega-text-danger"><?php echo esc_html__('Please activate plugin license to use this advanced features', 'rt-mega-menu'); ?></p>
-                                        </li>
                                         <?php do_action( 'rtmega_menu_item_visibility_conditions_content', $menu_item_id );?>
                                     </ul>
                                 </div>
@@ -390,7 +359,11 @@ if ( !class_exists('RTMEGA_MENU_Admin_Ajax')) {
                 $activeKitId = intval($activeKitId);
                 $args = array(
                     'post_type' => $post_type,
+                    // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostsPerPage_posts_per_page -- This fills the admin template dropdown, which has to list every template the user has built; a cap would silently hide some of them. No row count or object caches are requested, and it only runs on an admin AJAX request.
                     'posts_per_page' => -1,
+                    'no_found_rows' => true,
+                    'update_post_meta_cache' => false,
+                    'update_post_term_cache' => false,
                     'post_status' => 'publish',
                     // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in -- Excluding the Elementor active kit (single ID) from template lists; negligible perf cost.
                     'post__not_in' => array($activeKitId)

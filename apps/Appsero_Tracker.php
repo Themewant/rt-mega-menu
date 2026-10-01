@@ -23,8 +23,16 @@ class Appsero_Tracker {
     }
 
     private function includes() {
+        // The Composer autoloader in apps/vendor/autoload.php is required by the
+        // main plugin file immediately before this class is loaded, so
+        // \Appsero\Client resolves through it. There is no bundled fallback copy
+        // to require -- a missing autoloader is a packaging fault, not something
+        // to paper over here.
         if ( ! class_exists( '\\Appsero\\Client' ) ) {
-            require_once RTMEGA_MENU_PL_PATH . 'apps/Client.php';
+            $autoload = RTMEGA_MENU_PL_PATH . 'apps/vendor/autoload.php';
+            if ( file_exists( $autoload ) ) {
+                require_once $autoload;
+            }
         }
     }
 
@@ -39,10 +47,23 @@ class Appsero_Tracker {
 
         $this->client->set_textdomain( 'rt-mega-menu' );
 
-        $this->client->insights()
+        $insights = $this->client->insights();
+
+        $insights
             ->add_plugin_data()
             ->add_extra( $this->extra_data() )
             ->init();
+
+        // Appsero's own opt-in gate covers the weekly send and the activation
+        // send, but not its deactivation survey: submitting a reason posts the
+        // full tracking payload -- site URL, admin email and name, user counts,
+        // the active plugin list, server details and a freshly fetched public IP
+        // -- with no consent check of its own. Unhook that path entirely unless
+        // the site owner has actually opted in.
+        if ( 'yes' !== get_option( $this->client->slug . '_allow_tracking', 'no' ) ) {
+            remove_action( 'admin_footer', array( $insights, 'deactivate_scripts' ) );
+            remove_action( 'wp_ajax_' . $this->client->slug . '_submit-uninstall-reason', array( $insights, 'uninstall_reason_submission' ) );
+        }
     }
 
     private function extra_data() {

@@ -1,11 +1,12 @@
-=== RT Mega Menu – Mega Menu Builder for Elementor & Gutenberg ===
+=== RT Mega Menu ===
 Contributors: themewant
-Tags: Mega menu, Elementor, Widget, Megamenu, Menu
+Tags: mega menu, megamenu, menu, navigation, widget
 Requires at least: 6.3
-Tested up to: 7.0
-Stable tag: 1.5.3
+Requires PHP: 7.2
+Tested up to: 7.1
+Stable tag: 1.5.4
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 RT Mega Menu is a powerful WordPress mega menu plugin that lets you build responsive mega menus using Elementor or the Gutenberg editor.
 
@@ -14,7 +15,7 @@ RT Mega Menu is a powerful and easy-to-use WordPress mega menu builder plugin th
 
 Whether you're building a complex eCommerce navigation, a magazine layout, or a clean corporate menu, RT Mega Menu gives you the tools to do it fast and beautifully.
 
-Control your menu like never before with RT Mega Menu. Show or hide menu items based on **user role, login status, device, or location**. 
+Control your menu like never before with RT Mega Menu. Build the layout in Elementor or Gutenberg, pick a template per menu item, and style it down to the submenu. 
 Create smart, personalized navigation for every visitor—no coding needed. 🚀
 
 [Demo](https://rtmega.themewant.com/) | [Documentation](https://documentation.themewant.com/docs/rt-mega-menu-wordpress-plugins/) | [Upgrade to Pro](https://themewant.com/downloads/rt-mega-menu-pro/)
@@ -38,10 +39,10 @@ With RT Mega Menu, you’re no longer limited to basic dropdowns. Easily design 
 
 * **Drag-and-Drop Builder:** Seamlessly create complex menus using Gutenberg, Elementor, or your preferred builder.
 * **Full-Width & Boxed Layouts:** Design horizontal, vertical, or expandable mega menus to match any site style.
-* **Multiple Menu Skins:** Choose from pre-designed skins or create your own using a live preview interface.
+* **Horizontal or Vertical Layout:** Switch the menu between a horizontal bar and a vertical stack, with an optional sticky header.
 * **Mobile Responsive:** Fully responsive and touch-friendly across all devices and screen sizes.
 * **Icon & Label:** Add icons, images, or even shortcodes to enhance each menu item visually.
-* **Menu Visibility**: You can enable disable menu item based on user ruels, device or user location. 
+* **Per-Item Templates:** Assign a different Elementor or Gutenberg template to each menu item. 
 * **Sticky Menu Options:** Keep menus visible while scrolling for enhanced navigation and user experience.
 * **Widget-Ready Menus:** Insert WordPress widgets directly into your mega menus—no limits.
 * **Customizable Triggers:** Choose hover or click triggers, delays, animation styles, and more.
@@ -174,6 +175,14 @@ Yes, there is a free version of the RT Mega Menu plugin available on the WordPre
 10. Menu with Map
 
 == Changelog ==
+
+= 1.5.4 - 1 Oct 2026 =
+Security: The promotional notice is limited to this plugin's own admin pages instead of every wp-admin screen.
+Security: A dismissed notice stays dismissed; the record is no longer cleared when a campaign expires.
+Fixed: The dashboard widget no longer re-orders the Dashboard to sit above the core widgets.
+Fixed: Device labels in the block's responsive controls used another plugin's text domain and could never be translated.
+Fixed: Two admin template queries no longer request row counts and object caches they do not read.
+Added: Requires at least and Requires PHP are now declared in the plugin header.
 
 = 1.5.3 = 
 Security: Fixed authenticated (Subscriber+) stored XSS.
@@ -349,9 +358,9 @@ The external requests are made to the following domains:
   * `/wp-json/reacthemes/v1/get_rt_el_templates`
   * `/wp-json/reacthemes/v1/get_rt_el_template_data_by_id`
 
-* `https://themewant.com/menuicon`
+* `https://reactheme.com/products/license/`
 
-  * `/wp-json/reacthemes/v1/get_rtmega_notice`
+  * `/wp-json/reacthemes/v1/get_thewtmc`
 
 #### **Purpose of the Connection**
 
@@ -369,7 +378,22 @@ The plugin may send:
 * Site URL (hashed or basic reference)
 * Template request parameters (template ID)
 
-**No personal user data is collected, stored, or shared.**
+The template and notice endpoints above receive no personal user data.
+
+#### **Appsero (optional usage tracking)**
+
+The plugin bundles the Appsero SDK. It is **off by default** and sends nothing
+until an administrator clicks "Allow" on the tracking notice in wp-admin. If it
+is allowed, Appsero receives the site URL, the administrator's email address and
+name, WordPress and server version details, user counts per role, the list of
+active plugins and the theme in use, and the site's public IP address (fetched
+from `https://icanhazip.com/` at the moment the report is built). Choosing "No
+thanks" stops all of it, and nothing is sent again unless tracking is turned on.
+
+* Service: Appsero - `https://appsero.com/`
+* Privacy policy: `https://appsero.com/privacy-policy/`
+  (Appsero does not publish a separate terms-of-service document.)
+* IP lookup: `https://icanhazip.com/` - see `https://major.io/icanhazip-com-faq/`
 
 #### **When the Connection Occurs**
 

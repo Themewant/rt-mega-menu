@@ -5,6 +5,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class RTMEGA_Helper {
 
+	/**
+	 * Per-instance block CSS collected during the_content, printed once in the footer.
+	 *
+	 * @var string
+	 */
+	private static $deferred_css = '';
+
+	/**
+	 * Whether the wp_footer printer has been hooked yet.
+	 *
+	 * @var bool
+	 */
+	private static $deferred_hooked = false;
+
 	public static function add_responsive_vars ($attributes, &$target_array, $attr_base, $prop_name, $properties = [], $is_object = false) {
    		$devices = ['' => 'desktop', 'Tablet' => 'tablet', 'Mobile' => 'mobile'];
     
@@ -120,16 +134,70 @@ class RTMEGA_Helper {
 		if ( is_array( $sub_styles ) ) {
 			foreach ( $sub_styles as $sub_sel => $style ) {
 				if ( ! empty( $style ) ) {
-					// Prepend the selector to the sub-selector
-                    $output_css .= $selector . " " . $sub_sel . " { " . $style . "; }\n";
+					// Prepend the selector to the sub-selector. The value is
+					// re-sanitized here rather than trusted: this is a public
+					// static helper and a caller that skipped
+					// generate_responsive_css()/get_inline_styles() would
+					// otherwise be able to close the rule and open a new one.
+					$safe_style = self::rtmega_sanitize_css_value( $style );
+					if ( '' === $safe_style ) {
+						continue;
+					}
+                    $output_css .= $selector . " " . $sub_sel . " { " . $safe_style . "; }\n";
 				}
 			}
 		}
 
-		if ( ! empty( $output_css ) ) {
-            echo "<!-- RT Mega Menu Styles -->\n";
-            echo '<style type="text/css">' . wp_strip_all_tags( $output_css ) . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_strip_all_tags removes script/style injection while preserving CSS.
+		if ( empty( $output_css ) ) {
+			return;
 		}
+
+		// Before wp_head has printed -- a widget rendering in a header, say --
+		// the CSS can go straight onto the handle it belongs to.
+		if ( ! did_action( 'wp_head' ) && wp_style_is( $handle, 'enqueued' ) ) {
+			wp_add_inline_style( $handle, $output_css );
+			return;
+		}
+
+		// Inside the block editor's ServerSideRender request there is no wp_head,
+		// no wp_footer and no stylesheet pipeline -- only an HTML fragment. The
+		// preview would be unstyled without this, so the CSS travels with it.
+		if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+			// wp_strip_all_tags() is the escaper here, not esc_html(): esc_html
+			// turns the ">" of a child selector into "&gt;" and breaks the rule,
+			// while stripping tags removes any injected "</style><script>" and
+			// leaves the CSS byte-identical. This line never runs for a visitor.
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS cannot be HTML-escaped; wp_strip_all_tags() is the correct guard and no stylesheet pipeline exists inside a REST render.
+			echo '<style>' . wp_strip_all_tags( $output_css ) . '</style>';
+			return;
+		}
+
+		// Front end: the block renders during the_content, after wp_head. Collect
+		// the CSS and let WordPress print it with the late styles in the footer.
+		self::$deferred_css .= $output_css;
+
+		if ( ! self::$deferred_hooked ) {
+			self::$deferred_hooked = true;
+			add_action( 'wp_footer', array( __CLASS__, 'rtmega_print_deferred_styles' ), 5 );
+		}
+	}
+
+	/**
+	 * Prints the collected block CSS through the styles API.
+	 *
+	 * @return void
+	 */
+	public static function rtmega_print_deferred_styles() {
+
+		if ( '' === self::$deferred_css ) {
+			return;
+		}
+
+		wp_register_style( 'rtmegamenu-block-inline', false, array(), RTMEGA_MENU_VERSION );
+		wp_enqueue_style( 'rtmegamenu-block-inline' );
+		wp_add_inline_style( 'rtmegamenu-block-inline', self::$deferred_css );
+
+		self::$deferred_css = '';
 	}
   
   public static function rtmega_build_dimensions_css($dimensions, $property) {

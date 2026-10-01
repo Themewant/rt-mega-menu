@@ -87,7 +87,7 @@ const GradientPopover = ({ label, gradient = '', onChange, defaultGradient = '' 
                             }}
                             style={{ marginTop: '10px', width: '100%', justifyContent: 'center' }}
                         >
-                            {__('Reset', 'easy-hotel')}
+                            {__('Reset', 'rt-mega-menu')}
                         </Button>
                     </div>
                 </Popover>

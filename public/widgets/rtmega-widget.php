@@ -204,20 +204,6 @@ class RTMEGA_MENU_INLINE extends Widget_Base {
 				]
 			);
 		}
-		$this->add_control(
-			'mobile_menu_pro_notice',
-			[
-				'type' => Controls_Manager::RAW_HTML,
-				'raw'  => '<div style="padding:8px 10px;border-left:3px solid #f0ad00;border-radius:2px;font-size:12px;line-height:1.5;">
-					' . sprintf(
-						/* translators: %s: URL to the RT Mega Menu Pro upgrade page. */
-						__( '<strong>Mobile Menu</strong> is a <a href="%s" target="_blank" style="color:#f0ad00;pointer-events:auto;">Upgrade to Pro</a>. Upgrade to set a separate menu for mobile devices.', 'rt-mega-menu' ),
-						'https://themewant.com/downloads/rt-mega-menu-pro/'
-					) . '
-				</div>',
-				'content_classes' => 'rtmega-pro-feature-notice',
-			]
-		);
 
 		do_action( 'rtmega_mobile_menu_control_el', $this );
 
@@ -3178,12 +3164,23 @@ class RTMEGA_MENU_INLINE extends Widget_Base {
 					}
 				}
 
+				// The sticky-header behaviour now lives in rtmega-sticky-header.js.
+				// Tell it which branch to run by tagging the menu container,
+				// rather than printing a script into the page.
+				$rtmega_sticky_class = '';
+				if ( isset( $settings['enable_sticky_header'] ) && 'yes' === $settings['enable_sticky_header'] ) {
+					$rtmega_sticky_class = ' rtmega-sticky-on';
+					if ( isset( $settings['enable_backscroll_header_top'] ) && 'yes' === $settings['enable_backscroll_header_top'] ) {
+						$rtmega_sticky_class .= ' rtmega-backscroll-on';
+					}
+				}
+
 				$args = [
 					'echo'        => false,
 					'menu'        => $resolved_menu,
 					'fallback_cb' => '__return_empty_string',
 					'menu_class'      => 'menu desktop-menu rtmega-megamenu vertical-submenu-expand-mode-'.$settings['vertical_menu_submenu_expad_mode'] . ' ' .$menu_layout.' '.$vertical_menu_submenu_expad_mode_type,
-					'container_class'	=> 'rtmega-elelmentor-widget menu-wrapper rtmega-menu-container rtmega-menu-area '.$class_responsvie,
+					'container_class'	=> 'rtmega-elelmentor-widget menu-wrapper rtmega-menu-container rtmega-menu-area '.$class_responsvie.$rtmega_sticky_class,
 					'vertical_menu_active_icon' => $active_icon,
 					'submenu_parent_icon' => $submenu_parent_icon,
 					'menu_layout'		  => $settings['menu_layout'],
@@ -3198,8 +3195,7 @@ class RTMEGA_MENU_INLINE extends Widget_Base {
 					if( !empty($settings['mobile_menu'])){
 						$only_mobile_menu_args = $args;
 						$only_mobile_menu_args['items_wrap'] = $rtmega_mobile_menu_html;
-						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-						echo apply_filters( 'rtmega_mobile_menu_render', '', $settings, $only_mobile_menu_args );
+						echo wp_kses( apply_filters( 'rtmega_mobile_menu_render', '', $settings, $only_mobile_menu_args ), RTMEGA_Helper::rtmega_allowed_html() );
 					}
 					
 
@@ -3267,156 +3263,5 @@ class RTMEGA_MENU_INLINE extends Widget_Base {
 						<?php
 					}
 
-					if($settings['enable_sticky_header'] == 'yes'){
-						$enable_backscroll_header_top = $settings['enable_backscroll_header_top'];
-						if ( $enable_backscroll_header_top == 'yes' ) { ?>						
-							<script>
-							    (function($) {
-							        var header = $('header');
-							        var page = $('#page');
-							        var topbar = $('.rt-topbar-hide');
-							        header.addClass("sticky-header-on");
-							        header.addClass("rt-mega-up-scroll-hide");
-							        function updatePaddingAndMargin() {
-							            var headerHeight = header.outerHeight();
-							            var topbarHeight = topbar.length ? topbar.outerHeight() : 0;
-
-							            if (header.length && page.length) {
-								            if (!header.hasClass('fixed-header')) {
-						                        page.css('padding-top', headerHeight + 'px');
-						                    } else {
-						                        page.css('padding-top', '');
-						                    }
-						                }
-							           	
-							           	if (header.length) {
-								            if (header.hasClass('rt-mega-up-scroll-hide')) {
-								                header.css('margin-top', `-${topbarHeight}px`);
-								            } else {
-								                header.css('margin-top', '0px');
-								            }
-								        }
-							        }
-
-							        if ($('.sticky-header-on').length) {
-							            let lastScroll = 0;
-
-							            function sticky_header() {
-							                var headerHeight = header.innerHeight();
-							                let scroll = $(window).scrollTop();
-							        
-							                if (scroll > headerHeight ) {
-							                    header.addClass('sticky-header');
-							                } else {
-							                    header.removeClass('sticky-header');
-							                }
-
-							                if (scroll > headerHeight ) {
-							                    header.addClass('rt-mega-up-scroll-hide');
-							                } else {
-							                    header.removeClass('rt-mega-up-scroll-hide');
-							                }
-
-							                if (scroll > headerHeight && scroll > lastScroll) {
-							                    header.addClass('sticky-headers');
-							                } else if (scroll < lastScroll) {
-							                    header.removeClass('sticky-headers');
-							                }
-							                lastScroll = scroll;
-							                updatePaddingAndMargin();
-							            }
-
-							            $(document).ready(() => {
-							                updatePaddingAndMargin();
-							                sticky_header();
-							            });
-
-							            window.onload = () => {
-							                updatePaddingAndMargin();
-							                sticky_header();
-							            };
-
-							            $(window).on('scroll resize', () => {
-							                sticky_header();
-							                updatePaddingAndMargin();
-							            });
-							        }
-
-							    })(jQuery);
-							</script>
-						<?php } else {
-						?>
-							<script>
-							    (function($) {
-							        var header = $('header');
-							        var page = $('#page');
-							        var topbar = $('.rt-topbar-hide');
-							        header.addClass("sticky-header-on");
-							        function updatePaddingAndMargin() {
-							            var headerHeight = header.outerHeight();
-							            var topbarHeight = topbar.length ? topbar.outerHeight() : 0;
-
-							            if (header.length && page.length) {
-								            if (!header.hasClass('fixed-header')) {
-						                        page.css('padding-top', headerHeight + 'px');
-						                    } else {
-						                        page.css('padding-top', '');
-						                    }
-						                }
-							           	
-							           	if (header.length) {
-								            if (header.hasClass('sticky-headers')) {
-								                header.css('margin-top', `-${topbarHeight}px`);
-								            } else {
-								                header.css('margin-top', '0px');
-								            }
-								        }
-							        }
-
-							        if ($('.sticky-header-on').length) {
-							            let lastScroll = 0;
-
-							            function sticky_header() {
-
-							                var headerHeight = header.innerHeight();
-							                let scroll = $(window).scrollTop();
-
-							                if (scroll > headerHeight ) {
-							                    header.addClass('sticky-header');
-							                } else {
-							                    header.removeClass('sticky-header');
-							                }				                 
-
-							                if (scroll > headerHeight && scroll > lastScroll) {
-							                    header.addClass('sticky-headers');
-							                } else if (scroll < lastScroll) {
-							                    header.removeClass('sticky-headers');
-							                }
-
-							                lastScroll = scroll;
-							                updatePaddingAndMargin();
-							            }
-
-							            $(document).ready(() => {
-							                updatePaddingAndMargin();
-							                sticky_header();
-							            });
-
-							            window.onload = () => {
-							                updatePaddingAndMargin();
-							                sticky_header();
-							            };
-
-							            $(window).on('scroll resize', () => {
-							                sticky_header();
-							                updatePaddingAndMargin();
-							            });
-							        }
-
-							    })(jQuery);
-							</script>
-						<?php
-						}
-					}
 				}		
 }

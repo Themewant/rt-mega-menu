@@ -6,7 +6,7 @@
  * so the non-prefixed-variable sniff is disabled for the whole file.
  */
 
-// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- block render callback scope; these are template locals, not globals (see the docblock above).
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -32,7 +32,10 @@ if ( ! in_array( $menu_layout, array( 'horizontal', 'vertical' ), true ) ) {
 }
 $submenu_icon_style = isset($attributes['submenu_icon_style']) ? $attributes['submenu_icon_style'] : 'icon1';
 $vertical_active_menu_style = isset($attributes['vertical_active_menu_style']) ? $attributes['vertical_active_menu_style'] : 'icon1';
-$pointer_menu_item = isset($attributes['pointer_menu_item']) ? $attributes['pointer_menu_item'] : 'none';
+$pointer_menu_item = isset($attributes['pointer_menu_item']) ? sanitize_html_class($attributes['pointer_menu_item']) : 'none';
+if ( ! in_array( $pointer_menu_item, array( 'none', 'underline' ), true ) ) {
+    $pointer_menu_item = 'none';
+}
 $enableMobileMenu = isset($attributes['enableMobileMenu']) ? $attributes['enableMobileMenu'] : false;
 $mobileMenuSlug = isset($attributes['mobileMenuSlug']) ? $attributes['mobileMenuSlug'] : '';
 $mobileMenuOpenPosition = isset($attributes['mobileMenuOpenPosition']) ? $attributes['mobileMenuOpenPosition'] : 'right';
@@ -313,13 +316,15 @@ $menu_args = array(
 
 $block_wrap_attr = get_block_wrapper_attributes( array( 'class' => 'rtmega-block-wrap ' . $unique_id ) );
 ?>
-<div <?php echo wp_kses_post($block_wrap_attr); ?>>
+<div <?php
+    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() returns an attribute string already escaped by core; wp_kses() cannot act on a fragment with no tags.
+    echo $block_wrap_attr;
+    ?>>
     <?php echo wp_nav_menu( $menu_args ); ?>
     <?php 
     $only_mobile_menu_args = $menu_args;
     $only_mobile_menu_args['items_wrap'] = $rtmega_mobile_menu_html;
-    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-    echo wp_kses_post( apply_filters( 'rtmega_block_mobile_menu_render', '', $attributes, $only_mobile_menu_args ) );
+    echo wp_kses( apply_filters( 'rtmega_block_mobile_menu_render', '', $attributes, $only_mobile_menu_args ), RTMEGA_Helper::rtmega_allowed_html() );
     ?>
     <?php
     if($enableMobileMenu){

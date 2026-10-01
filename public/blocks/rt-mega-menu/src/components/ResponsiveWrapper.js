@@ -24,9 +24,9 @@ const ResponsiveWrapper = ({ children, label }) => {
     };
 
     const devices = [
-        { name: 'desktop', icon: 'desktop', label: __('Desktop', 'bold-post') },
-        { name: 'tablet', icon: 'tablet', label: __('Tablet', 'bold-post') },
-        { name: 'mobile', icon: 'smartphone', label: __('Mobile', 'bold-post') },
+        { name: 'desktop', icon: 'desktop', label: __('Desktop', 'rt-mega-menu') },
+        { name: 'tablet', icon: 'tablet', label: __('Tablet', 'rt-mega-menu') },
+        { name: 'mobile', icon: 'smartphone', label: __('Mobile', 'rt-mega-menu') },
     ];
 
     return (

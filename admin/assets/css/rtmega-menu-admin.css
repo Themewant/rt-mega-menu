@@ -304,15 +304,6 @@ div#rtmega-menu-setting-modal .rtmega-modal-body .ajax-loader.show {
     margin-bottom: 7px;
 }
 
-.rtmega-menu-option-input-list .pro-features-placeholders .option-inputs {
-    display: flex;
-    align-items: center;
-}
-
-.rtmega-menu-option-input-list .pro-features-placeholders .option-inputs img {
-    height: max-content;
-}
-
 .rtmega-menu-option-input-list li .option-inputs .multi-inputs label {
     width: 150px;
 }
@@ -665,10 +656,6 @@ form#rtmega-template-imoporter-form .form-group .button {
 
 #rtmega-notice-emicon_pro_plugin_notice .rtmega-notice-action-buttons {
     margin-top: 10px;
-}
-
-.rtmega-set-visibility-conditions-free {
-    margin-top: 10px !important;
 }
 
 .rtmega-set-visibility-conditions {

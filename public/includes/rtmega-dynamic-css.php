@@ -59,8 +59,12 @@ function rtmega_menu_build_dynamic_css() {
     }
 
     if ( ! empty( $rtmega_menu_options['submenu_width'] ) ) {
-        $width = esc_html( $rtmega_menu_options['submenu_width'] );
-        $css  .= ".rtmega-menu-container .rtmega-megamenu .menu-item ul.sub-menu{width:{$width};}";
+        // A length, not HTML: esc_html() would leave {, } and ; intact and guard
+        // nothing. Accept a number with an allowed unit, or nothing at all.
+        $width = trim( (string) $rtmega_menu_options['submenu_width'] );
+        if ( preg_match( '/^-?\d+(\.\d+)?(px|em|rem|%|vh|vw)?$/', $width ) ) {
+            $css .= ".rtmega-menu-container .rtmega-megamenu .menu-item ul.sub-menu{width:{$width};}";
+        }
     }
 
     return $css;
